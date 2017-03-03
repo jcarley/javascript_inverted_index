@@ -84,23 +84,6 @@ test('index a document', () => {
 });
 
 test('index several documents', (done) => {
-
-  let doc1 = {
-    id: "123",
-    body: "Turtles love pizza"
-  };
-
-  let doc2 = {
-    id: "124",
-    body: "Turtles love water"
-  };
-
-  let doc3 = {
-    id: "125",
-    body: "Turtles know karate",
-    title: "The story of leo"
-  };
-
   // we could add a converter here.  going to do with out for now
 
   let invertedIndex = new InvertedIndex();
