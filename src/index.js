@@ -3,6 +3,8 @@ import { RBTree } from 'bintrees';
 import Entry from './entry';
 import stop_words_list from './stop_words';
 
+var debug = require('debug')('indexer');
+
 export default class InvertedIndex {
 
   constructor() {
@@ -13,6 +15,7 @@ export default class InvertedIndex {
   index(doc) {
     let keys = _.keys(doc);
     let terms = _.map(keys, (key) => {
+      debug(`processing key: ${key}`);
       let text = doc[key];
       let t = this.extract_terms(text);
       t = this.lower_case_filter(t);
@@ -62,6 +65,9 @@ export default class InvertedIndex {
   }
 
   extract_terms(text) {
+    if(typeof text !== 'string')
+      return text;
+
     let re = /\b[A-Za-z0-9-_.]+\b/g;
     let result = text.match(re);
     return result;

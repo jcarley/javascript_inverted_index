@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import assert from 'assert';
+import faker from 'faker';
 
 import InvertedIndex from '../src/index';
 import Entry from '../src/entry';
@@ -82,7 +83,7 @@ test('index a document', () => {
   assert.deepStrictEqual(invertedIndex.reference.length, 1);
 });
 
-test('index several documents', () => {
+test('index several documents', (done) => {
 
   let doc1 = {
     id: "123",
@@ -105,22 +106,38 @@ test('index several documents', () => {
   let invertedIndex = new InvertedIndex();
 
   let start = new Date();
-  for(let i in _.range(10000)) {
-    invertedIndex.index(doc1);
-    invertedIndex.index(doc2);
-    invertedIndex.index(doc3);
+  let card = null;
+  for(let i in _.range(30000)) {
+    card = createCard();
+    invertedIndex.index(card);
   }
   let end = new Date();
   var time = end.getTime() - start.getTime();
   console.log('finished in', time, 'ms');
 
   start = new Date();
-  let foundDocs = invertedIndex.find("title:leo");
+  let foundDocs = invertedIndex.find("name:jeff");
   end = new Date();
   time = end.getTime() - start.getTime();
   console.log('finished in', time, 'ms');
+  console.log(foundDocs.length);
+  done();
   // assert.deepStrictEqual(foundDocs, [doc3]);
-});
+}).timeout(10000);
 
-
+function createCard() {
+  var name = faker.name.firstName(),
+    userName = faker.internet.userName(name);
+  return {
+    "name": name,
+    "username": userName,
+    "avatar": faker.internet.avatar(),
+    "email": faker.internet.email(userName),
+    "dob": faker.date.past(50, new Date("Sat Sep 20 1992 21:35:02 GMT+0200 (CEST)")),
+    "phone": faker.phone.phoneNumber(),
+    "website": faker.internet.domainName(),
+    "employer": faker.company.companyName(),
+    "city": faker.address.city(),
+  };
+}
 
