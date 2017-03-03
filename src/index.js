@@ -47,15 +47,18 @@ export default class InvertedIndex {
   }
 
   compare(entry1, entry2) {
+
     let key1 = entry1.term;
     let key2 = entry2.term;
-    if(_.isEqual(key1, key2)) {
-      return 0;
-    } else if(_.gt(key1, key2)) {
-      return 1;
-    } else {
-      return -1;
+
+    let comparison = 0
+    if(_.gt(key1, key2)) {
+      comparison = 1;
+    } else if( _.lt(key1, key2)) {
+      comparison =  -1;
     }
+
+    return comparison;
   }
 
   extract_terms(text) {
