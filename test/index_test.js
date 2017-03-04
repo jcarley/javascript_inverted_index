@@ -99,7 +99,20 @@ test('index several documents', (done) => {
   console.log('finished in', time, 'ms');
 
   start = new Date();
-  let foundDocs = invertedIndex.find("name:jeff");
+
+  let query = new MatchAllQuery("jeff");
+
+  /*
+   * query : Query    - a query object
+   * size : int       - page size
+   * sort : string    - sort order
+   */
+  let searchRequest = new SearchRequest(query);
+  searchRequest.setSize(10);
+  searchRequest.setOrder("desc");
+  let foundDocs = invertedIndex.search(searchRequest);
+  // let foundDocs = invertedIndex.find("name:jeff");
+
   end = new Date();
   time = end.getTime() - start.getTime();
   console.log('finished in', time, 'ms');
